@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import SubmitField, SelectField, IntegerField
 from wtforms.validators import DataRequired, NumberRange
@@ -48,15 +48,15 @@ def index():
         # Обеспечение безопасного имени файла
         filename = secure_filename(form.upload.data.filename)
         
-        # Директории сохранения
+        # Директории сохранения (оставляем os.path.join, так как это для сохранения на жесткий диск)
         input_path = os.path.join('static', 'uploads', filename)
         output_path = os.path.join('static', 'processed', f'striped_{filename}')
         plot_path = os.path.join('static', 'plots', f'hist_{filename}')
         
-        # 1. Сохранение исходного изображения
+        # Сохранение исходного изображения
         form.upload.data.save(input_path)
         
-        # 2. Обработка изображения (обмен полос)
+        # Обработка изображения (обмен полос)
         process_striped_image(
             input_path, 
             output_path, 
@@ -64,13 +64,13 @@ def index():
             form.stripe_width.data
         )
         
-        # 3. Построение графика распределения цветов исходного файла
+        # Построение графика распределения цветов исходного файла
         plot_color_distribution(input_path, plot_path)
         
-        # Формирование путей для шаблона
-        orig_img_url = f'/{input_path}'
-        proc_img_url = f'/{output_path}'
-        plot_img_url = f'/{plot_path}'
+        # Формирование путей для браузера через url_for (здесь всегда используются прямые слеши)
+        orig_img_url = url_for('static', filename=f'uploads/{filename}')
+        proc_img_url = url_for('static', filename=f'processed/striped_{filename}')
+        plot_img_url = url_for('static', filename=f'plots/hist_{filename}')
 
     return render_template(
         'index.html', 
