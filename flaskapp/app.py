@@ -13,8 +13,8 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 
 # Настройки для Google reCAPTCHA v2
 app.config['RECAPTCHA_USE_SSL'] = False
-app.config['RECAPTCHA_PUBLIC_KEY'] = 'ВАШ_ПУБЛИЧНЫЙ_КЛЮЧ'
-app.config['RECAPTCHA_PRIVATE_KEY'] = 'ВАШ_СЕКРЕТНЫЙ_КЛЮЧ'
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6LezFfssAAAAACmJcAAceZePpJXd8fgZSWu8suwr'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6LezFfssAAAAAKepjcnfC00lSUBNT9D4E7vNrYph'
 app.config['RECAPTCHA_OPTIONS'] = {'theme': 'white'}
 
 Bootstrap(app)
