@@ -1,0 +1,34 @@
+version: 1.0.{build}
+
+# Используем образ Visual Studio 2019 (Windows)
+image: Visual Studio 2019
+
+# Настраиваем переменные окружения для Python
+environment:
+  PYTHON: "C:\\Python38-x64"
+
+# Инициализация путей
+init:
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+
+# Установка зависимостей
+install:
+  - python -m pip install --upgrade pip
+  - pip install -r requirements.txt
+
+# Отключаем фазу сборки MSBuild (так как у нас Python)
+build: off
+
+# Тестирование проекта
+test_script:
+  # 1. Запускаем сервер Flask в фоновом режиме через PowerShell
+  - ps: $flaskProcess = Start-Process python -ArgumentList "app.py" -PassThru -NoNewWindow
+  
+  # 2. Ждем 5 секунд, чтобы сервер успел запуститься
+  - ps: Start-Sleep -Seconds 5
+  
+  # 3. Запускаем тестовый клиентский скрипт
+  - python client.py
+  
+  # 4. Останавливаем процесс сервера после прохождения теста
+  - ps: Stop-Process -Id $flaskProcess.Id -Force
