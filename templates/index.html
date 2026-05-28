@@ -1,0 +1,38 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Лабораторная работа №1 Вариант 17{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Обработка изображений</h1>
+        <p>Вариант 17: Обмен местами чередующихся полос изображения.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="well">
+                {{ wtf.quick_form(form, enctype="multipart/form-data") }}
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            {% if original_img %}
+                <h3>Исходное изображение</h3>
+                <img src="{{ url_for('static', filename='uploads/' + original_img) }}" class="img-responsive img-thumbnail">
+                
+                <h3>График распределения цветов</h3>
+                <img src="{{ url_for('static', filename='uploads/' + plot_img) }}" class="img-responsive img-thumbnail">
+                
+                <h3>Результат обработки</h3>
+                <img src="{{ url_for('static', filename='uploads/' + processed_img) }}" class="img-responsive img-thumbnail">
+            {% else %}
+                <div class="alert alert-info">
+                    Загрузите изображение для начала обработки.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
